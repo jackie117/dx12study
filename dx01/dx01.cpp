@@ -1,15 +1,15 @@
-/// -----------------------------------ã€å¤´æ–‡ä»¶åŒ…å«ã€‘-----------------------------------
-// Windows å¤´æ–‡ä»¶
+/// -----------------------------------¡¾Í·ÎÄ¼þ°üº¬¡¿-----------------------------------
+// Windows Í·ÎÄ¼þ
 #include <windows.h>
 /// -----------------------------------------------------------------------------------
 
-/// -----------------------------------ã€å®å®šä¹‰éƒ¨åˆ†ã€‘-----------------------------------
-#define WINDOWTITLE L"è‡´æˆ‘ä»¬æ°¸ä¸ç†„ç­çš„æ¸¸æˆå¼€å‘æ¢¦æƒ³~"
+/// -----------------------------------¡¾ºê¶¨Òå²¿·Ö¡¿-----------------------------------
+#define WINDOWTITLE L"ÖÂÎÒÃÇÓÀ²»Ï¨ÃðµÄÓÎÏ·¿ª·¢ÃÎÏë~"
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 /// -----------------------------------------------------------------------------------
 
-/// -----------------------------------ã€å…¨å±€å˜é‡ã€‘-----------------------------------
+/// -----------------------------------¡¾È«¾Ö±äÁ¿¡¿-----------------------------------
 float g_posX = 0;
 float g_posY = 0;
 HINSTANCE g_hInstance = 0;
@@ -17,17 +17,17 @@ int g_nCmdShow = 0;
 HWND g_hwnd = 0;
 /// ---------------------------------------------------------------------------------
 
-/// -----------------------------------ã€ å‡½æ•°å£°æ˜Ž ã€‘----------------------------------
+/// -----------------------------------¡¾ º¯ÊýÉùÃ÷ ¡¿----------------------------------
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-void InitWindow();	//åˆå§‹åŒ–çª—å£
-void Init();		//åˆå§‹åŒ–ç¨‹åº
-void UpdateScene();	//æ›´æ–°ç»˜åˆ¶çš„æ•°æ®
-void DrawScene();	//è¿›è¡Œç»˜åˆ¶æ“ä½œ
-int Run();			//è¿è¡Œ
+void InitWindow();	//³õÊ¼»¯´°¿Ú
+void Init();		//³õÊ¼»¯³ÌÐò
+void UpdateScene();	//¸üÐÂ»æÖÆµÄÊý¾Ý
+void DrawScene();	//½øÐÐ»æÖÆ²Ù×÷
+int Run();			//ÔËÐÐ
 /// ---------------------------------------------------------------------------------
 
-/// -----------------------------------ã€ å…¥å£å‡½æ•° WinMain() ã€‘----------------------------------
-/// winçª—å£å…¥å£å‡½æ•°
+/// -----------------------------------¡¾ Èë¿Úº¯Êý WinMain() ¡¿----------------------------------
+/// win´°¿ÚÈë¿Úº¯Êý
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -55,11 +55,11 @@ void Init()
 
 void InitWindow()
 {
-	// æ³¨å†Œçª—å£ç±»
+	// ×¢²á´°¿ÚÀà
 	WNDCLASSEX wndClass = { 0 };
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.lpfnWndProc = WndProc;			//	æ¶ˆæ¯å¤„ç†å‡½æ•°å›žè°ƒ	é»˜è®¤å¡« DefWindowProc é»˜è®¤çš„æ¶ˆæ¯å¤„ç† default Window procedure
+	wndClass.lpfnWndProc = WndProc;			//	ÏûÏ¢´¦Àíº¯Êý»Øµ÷	Ä¬ÈÏÌî DefWindowProc Ä¬ÈÏµÄÏûÏ¢´¦Àí default Window procedure
 	wndClass.hInstance = g_hInstance;
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
@@ -71,46 +71,46 @@ void InitWindow()
 
 	if (!RegisterClassEx(&wndClass))
 	{
-		MessageBox(0, L"æ³¨å†Œç±»å¤±è´¥", 0, 0);
+		MessageBox(0, L"×¢²áÀàÊ§°Ü", 0, 0);
 		return;
 	}
 
-	// åˆ›å»ºçª—å£
+	// ´´½¨´°¿Ú
 	HWND hwnd = CreateWindowExW(
-		WS_EX_OVERLAPPEDWINDOW,			// æ‰©å±•çª—å£æ ·å¼
-		L"ForTheDreamOfGameDevelop",	// çª—å£ç±»å
-		WINDOWTITLE,					// çª—å£æ ‡é¢˜
-		WS_OVERLAPPEDWINDOW,			// è¦åˆ›å»ºçš„çª—å£ç±»åž‹
-		CW_USEDEFAULT, CW_USEDEFAULT,	// åˆå§‹ä½ç½®(x, y)ï¼ˆç›¸å¯¹ä¸Žçˆ¶çª—å£ï¼‰
-		WINDOW_WIDTH, WINDOW_HEIGHT,	// åˆå§‹å¤§å°ï¼ˆå®½åº¦ï¼Œé•¿åº¦ï¼‰
-		NULL,							// æ­¤çª—å£çš„çˆ¶çº§ï¼ˆçˆ¶çª—å£å¥æŸ„ï¼‰
-		NULL,							// èœå•æ å¥æŸ„
-		g_hInstance,					// ç¨‹åºçš„å¥æŸ„ï¼ˆWinMain çš„ç¬¬ä¸€ä¸ªå‚æ•°ï¼‰
-		NULL							// é™„åŠ æ•°æ®ã€‚ï¼ˆä¸€èˆ¬ä¸ç”¨ï¼‰ä¼ é€’ç»™çª—å£è¿‡ç¨‹çš„å€¼
+		WS_EX_OVERLAPPEDWINDOW,			// À©Õ¹´°¿ÚÑùÊ½
+		L"ForTheDreamOfGameDevelop",	// ´°¿ÚÀàÃû
+		WINDOWTITLE,					// ´°¿Ú±êÌâ
+		WS_OVERLAPPEDWINDOW,			// Òª´´½¨µÄ´°¿ÚÀàÐÍ
+		CW_USEDEFAULT, CW_USEDEFAULT,	// ³õÊ¼Î»ÖÃ(x, y)£¨Ïà¶ÔÓë¸¸´°¿Ú£©
+		WINDOW_WIDTH, WINDOW_HEIGHT,	// ³õÊ¼´óÐ¡£¨¿í¶È£¬³¤¶È£©
+		NULL,							// ´Ë´°¿ÚµÄ¸¸¼¶£¨¸¸´°¿Ú¾ä±ú£©
+		NULL,							// ²Ëµ¥À¸¾ä±ú
+		g_hInstance,					// ³ÌÐòµÄ¾ä±ú£¨WinMain µÄµÚÒ»¸ö²ÎÊý£©
+		NULL							// ¸½¼ÓÊý¾Ý¡££¨Ò»°ã²»ÓÃ£©´«µÝ¸ø´°¿Ú¹ý³ÌµÄÖµ
 	);
 
 	if (!hwnd)
 	{
-		MessageBox(0, L"åˆ›å»ºçª—å£å¤±è´¥ã€‚", 0, 0);
+		MessageBox(0, L"´´½¨´°¿ÚÊ§°Ü¡£", 0, 0);
 		return;
 	}
 
-	// çª—å£ç§»åŠ¨ï¼Œ
+	// ´°¿ÚÒÆ¶¯£¬
 	MoveWindow(hwnd, 250, 80, WINDOW_WIDTH, WINDOW_HEIGHT, true);
-	// æ˜¾ç¤ºçª—å£ï¼Œ g_nCmdShowæ˜¾ç¤ºçš„ç±»åž‹
+	// ÏÔÊ¾´°¿Ú£¬ g_nCmdShowÏÔÊ¾µÄÀàÐÍ
 	ShowWindow(hwnd, g_nCmdShow);
-	// æ›´æ–°çª—å£å†…å®¹
+	// ¸üÐÂ´°¿ÚÄÚÈÝ
 	UpdateWindow(hwnd);
 }
 
-/// -----------------------------------ã€æ¶ˆæ¯å¤„ç†å‡½æ•°ã€‘----------------------------------
+/// -----------------------------------¡¾ÏûÏ¢´¦Àíº¯Êý¡¿----------------------------------
 /// <summary>
-///  æ¶ˆæ¯å¤„ç†å‡½æ•° ã€‚ï¼ˆæ“ä½œç³»ç»Ÿæ¥è°ƒç”¨ï¼‰
+///  ÏûÏ¢´¦Àíº¯Êý ¡££¨²Ù×÷ÏµÍ³À´µ÷ÓÃ£©
 /// </summary>
 /// <param name="hwnd"></param>
-/// <param name="message">æ¶ˆæ¯ç±»åž‹</param>
-/// <param name="wParam">æ¶ˆæ¯å†…å®¹</param>
-/// <param name="lParam">æ¶ˆæ¯å†…å®¹</param>
+/// <param name="message">ÏûÏ¢ÀàÐÍ</param>
+/// <param name="wParam">ÏûÏ¢ÄÚÈÝ</param>
+/// <param name="lParam">ÏûÏ¢ÄÚÈÝ</param>
 /// <returns></returns>
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -141,8 +141,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-/// -----------------------------------ã€è¿›è¡Œç»˜åˆ¶ã€‘-----------------------------------
-/// å¤„ç†å¤–æ¥ä¿¡æ¯è¿›è¡Œç»˜åˆ¶
+/// -----------------------------------¡¾½øÐÐ»æÖÆ¡¿-----------------------------------
+/// ´¦ÀíÍâÀ´ÐÅÏ¢½øÐÐ»æÖÆ
 void DrawScene()
 {
 	HDC hdc = GetDC(g_hwnd);
@@ -151,17 +151,17 @@ void DrawScene()
 }
 /// ---------------------------------------------------------------------------------
 
-//-----------------------------------ã€æ›´æ–°ç»˜åˆ¶çš„æ•°æ®ã€‘-----------------------------------
-// å¤„ç†å¤–æ¥ä¿¡æ¯
+//-----------------------------------¡¾¸üÐÂ»æÖÆµÄÊý¾Ý¡¿-----------------------------------
+// ´¦ÀíÍâÀ´ÐÅÏ¢
 void UpdateScene()
 {
 	g_posY += 0.001f;
 }
 /// ---------------------------------------------------------------------------------
 
-/// -----------------------------------ã€æ¸¸æˆè¿è¡Œå‡½æ•°ã€‘-----------------------------------
-/// æ¸¸æˆå¾ªçŽ¯æ¡†æž¶å°è£…åœ¨å…¶ä¸­
-/// å³æ¶ˆæ¯å¾ªçŽ¯é€‰æ‹©è°å¤„ç†
+/// -----------------------------------¡¾ÓÎÏ·ÔËÐÐº¯Êý¡¿-----------------------------------
+/// ÓÎÏ·Ñ­»·¿ò¼Ü·â×°ÔÚÆäÖÐ
+/// ¼´ÏûÏ¢Ñ­»·Ñ¡ÔñË­´¦Àí
 int Run()
 {
 	MSG msg = { 0 };
