@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dx02.cpp">
+    <ClCompile Include="dx04.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

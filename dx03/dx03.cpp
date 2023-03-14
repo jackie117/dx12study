@@ -141,10 +141,10 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-//开启D3D12调试层。
-//创建设备。
-//创建围栏，同步CPU和GPU。
-//获取描述符大小。
+//0.开启D3D12调试层。（在初始化D3D的开头）
+//创建设备。			CreateDevice()
+//创建围栏。			CreateFence()
+//获取描述符大小。	GetDescriptorSize()
 //设置MSAA抗锯齿属性。
 //创建命令队列、命令列表、命令分配器。
 //创建交换链。
@@ -183,7 +183,7 @@ void CreateFence()
 	ThrowIfFailed(g_d3dDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
 }
 
-/// 3.获取描述符大小，
+/// 3.获取描述符大小
 /// 可以让我们知道描述符堆中每个元素的大小（描述符在不同的GPU平台上的大小各异），
 /// 方便我们之后在地址中做偏移来找到堆中的描述符元素。
 /// 这里我们获取三个描述符大小，分别是
@@ -588,11 +588,16 @@ void Draw()
 	// 清除后台缓冲区和深度缓冲区，并赋值。
 	//步骤是先获得堆中描述符句柄（即地址），
 	//再通过ClearRenderTargetView函数和ClearDepthStencilView函数做清除和赋值。
-	//这里我们将RT资源背景色赋值为DarkRed（暗红）。
+	//这里我们将RT资源背景色赋值为Black（黑色）DarkRed（暗红）。
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(g_rtvHeap->GetCPUDescriptorHandleForHeapStart(), ref_mCurrentBackBuffer, g_rtvDescriptorSize);
-	g_commandList->ClearRenderTargetView(rtvHandle, DirectX::Colors::DarkRed, 0, nullptr);//清除RT背景色为暗红，并且不设置裁剪矩形
+	g_commandList->ClearRenderTargetView(
+		rtvHandle, 
+		DirectX::Colors::Black,
+		0, 
+		nullptr);	//清除RT背景色为黑色，并且不设置裁剪矩形
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = g_dsvHeap->GetCPUDescriptorHandleForHeapStart();
-	g_commandList->ClearDepthStencilView(dsvHandle,	//DSV描述符句柄
+	g_commandList->ClearDepthStencilView(
+		dsvHandle,	//DSV描述符句柄
 		D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,	//FLAG
 		1.0f,	//默认深度值
 		0,	//默认模板值
